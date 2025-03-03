@@ -1,0 +1,35 @@
+﻿<Window x:Class="SimpleCalc.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleCalc"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="610">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox Grid.Row="0" Grid.Column="1" Name="firstNumericTextBox" Width="150" Height="30" FontSize="20" PreviewTextInput="NumericTextBox_PreviewTextInput" />
+        <TextBox Grid.Row="0" Grid.Column="3" Name="secondNumericTextBox" Width="150" Height="30" FontSize="20" PreviewTextInput="NumericTextBox_PreviewTextInput" />
+        <TextBox Grid.Row="0" Grid.Column="5" Name="ResultNumericTextBox" Width="200" Height="30" FontSize="20" TextChanged="ResultNumericTextBox_TextChanged" />
+        <ComboBox Grid.Row="0" Grid.Column="2" Name="fourArithmeticOptsComboBox" Width="50" Height="30" FontSize="20" />
+        <TextBlock Grid.Row="0" Grid.Column="4" Name="equal" Width="40" Height="30" FontSize="20" Text ="  = "/>
+        <Button Grid.Row="1" Grid.Column="3" Content=" Calc " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,10,0,0" Click="Calc_Button"/>
+
+
+
+
+
+    </Grid>
+</Window>
