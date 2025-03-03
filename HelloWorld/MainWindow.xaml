@@ -7,7 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="200" Width="300">
     <Grid>
-        <Button Content=" CLICK! " HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Button Grid.Row="0" Content=" CLICK! " HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click"/>
+        <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="コミットのテスト"/>
 
     </Grid>
 </Window>
