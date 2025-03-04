@@ -23,31 +23,35 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        // TODO: コメントはコードとは別の行に記述してください。
         var items = new List<string> { "＋", "－", "×", "÷" }; //インデックスではなく文字で判断
         fourArithmeticOptsComboBox.ItemsSource = items;
     }
     private void NumericTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
     {
         // 数字(整数)だけを許可
-        e.Handled = !IsNumeric(e.Text); 
+        e.Handled = !IsNumeric(e.Text);
     }
 
+    // TODO: summaryの内容を書いてください。
     /// <summary>
     /// test
     /// </summary>
     /// <param name="text"></param>
     /// <returns></returns>
-    private bool IsNumeric(string text) 
+    private bool IsNumeric(string text)
     {
-        // 数値だけ（整数）を許可 
+        // 数値だけ（整数）を許可
         // bool演算なので受け取った値が整数か否かを返却
         return text.All(Char.IsDigit);
     }
 
-  
+
 
     private void Calc_Button(object sender, RoutedEventArgs e )
     {
+        // TODO:処理をそのままなぞるだけのコメントは書かない
+        // ソースコードから読み取れない実装意図などを記述してください。
         var firstNum = firstNumericTextBox.Text;    //一つ目のTextBoxから文字列の読み込み
         var secondNum = secondNumericTextBox.Text;　//二つ目のTextBoxから文字列の読み込み
         int firstNum_int, econdNum_int;                   //intへ返還後の変数名
@@ -55,9 +59,11 @@ public partial class MainWindow : Window
 
         int.TryParse(firstNum, out firstNum_int);
         int.TryParse(secondNum, out econdNum_int);
+
+        // TODO: 使用しない、しなくなったコードは消してください。
         //fourArithmeticOptsComboBox
 
-        
+
         switch (fourArithmeticOpts) //ComboBoxで選択された演算子を読み込み、caseで場合分けし、結果をResultNumに代入
         {
             case "＋":

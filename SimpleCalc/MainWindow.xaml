@@ -22,6 +22,7 @@
 
         <TextBox Grid.Row="0" Grid.Column="1" Name="firstNumericTextBox" Width="150" Height="30" FontSize="20" PreviewTextInput="NumericTextBox_PreviewTextInput" />
         <TextBox Grid.Row="0" Grid.Column="3" Name="secondNumericTextBox" Width="150" Height="30" FontSize="20" PreviewTextInput="NumericTextBox_PreviewTextInput" />
+        <!--TODO: イベントハンドラーが実装されていません。コミットする際はビルドできるか確認してください。-->
         <TextBox Grid.Row="0" Grid.Column="5" Name="ResultNumericTextBox" Width="200" Height="30" FontSize="20" TextChanged="ResultNumericTextBox_TextChanged" />
         <ComboBox Grid.Row="0" Grid.Column="2" Name="fourArithmeticOptsComboBox" Width="50" Height="30" FontSize="20" />
         <TextBlock Grid.Row="0" Grid.Column="4" Name="equal" Width="40" Height="30" FontSize="20" Text ="  = "/>
