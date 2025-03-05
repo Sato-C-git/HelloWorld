@@ -100,7 +100,7 @@ public partial class MainWindow : Window
         ResultNumericTextBox.Text = ResultNum_int.ToString();
 
         
-
+        //
         var history = new CalculationHistory()
         {
             FirstNum = firstNum,
@@ -151,7 +151,7 @@ public partial class MainWindow : Window
                 }
 
                 // CsvHelperを使用してリストをCSVに書き込む
-                using (var writer = new StreamWriter(filePath))
+                using (var writer = new StreamWriter(filePath, true, Encoding.UTF8))
                 using (var csv = new CsvWriter(writer,
                            new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture)))
                 {
