@@ -49,11 +49,6 @@ public partial class MainWindow : Window
 
 
 
-    /// <summary>
-    /// このメソッドは、2つの入力値と選択した演算子にあった計算をしてその結果を出力する。
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     private void Calc_Button(object sender, RoutedEventArgs e )
     {
         // DONE:処理をそのままなぞるだけのコメントは書かない
@@ -87,7 +82,10 @@ public partial class MainWindow : Window
                  ResultNum = firstNum_int * secondNum_int;
                 break;
             case "÷":
-                 ResultNum = firstNum_int / secondNum_int;
+                if (secondNum_int != 0)
+                    ResultNum = firstNum_int / secondNum_int;
+                else
+                    MessageBox.Show("ゼロで割ることはできません");
                 break;
         }
 
@@ -95,4 +93,5 @@ public partial class MainWindow : Window
         ResultNumericTextBox.Text = ResultNum.ToString(); 
 
     }
+
 }
