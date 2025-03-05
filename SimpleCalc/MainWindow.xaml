@@ -19,6 +19,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
 
         <TextBox Grid.Row="0" Grid.Column="1" Name="firstNumericTextBox" Width="150" Height="30" FontSize="20" PreviewTextInput="NumericTextBox_PreviewTextInput" />
@@ -27,7 +28,32 @@
         <TextBox Grid.Row="0" Grid.Column="5" Name="ResultNumericTextBox" Width="200" Height="30" FontSize="20"/>
         <ComboBox Grid.Row="0" Grid.Column="2" Name="fourArithmeticOptsComboBox" Width="50" Height="30" FontSize="20" />
         <TextBlock Grid.Row="0" Grid.Column="4" Name="equal" Width="40" Height="30" FontSize="20" Text ="  = "/>
-        <Button Grid.Row="1" Grid.Column="3" Content=" Calc " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,10,0,0" Click="Calc_Button"/>
+        <Button Grid.Row="1" Grid.Column="3" Content=" Calc " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,0,0,0" Click="Calc_Button"/>
+        <ListBox Grid.Row="2" Grid.Column="3" Margin="-50,0,-50,0" Name="CalcHistoryListBox" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding FirstNum }" />
+                       <TextBlock Grid.Column="1" Text="{ Binding FourArithmeticOpts }" />
+                        <TextBlock Grid.Column="2" Text="{ Binding SecondNum }" />
+                        <TextBlock Grid.Column="3" Text="=" />
+                        <TextBlock Grid.Column="4" Text="{ Binding ResultNum }" />
+                        <TextBlock Grid.Column="5" Text=" " />
+                        <TextBlock Grid.Column="6" Text="{ Binding CalcDateTime, StringFormat=yyyy/MM/dd HH:mm:ss }" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
 
 
 

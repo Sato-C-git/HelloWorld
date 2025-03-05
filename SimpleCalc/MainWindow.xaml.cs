@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,14 +18,17 @@ namespace SimpleCalc;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private int ResultNum;
+    private int ResultNum_int;
+    private List<CalculationHistory> histories = new();
 
     public MainWindow()
     {
         InitializeComponent();
+       
+        CalcHistoryListBox.ItemsSource = histories;
 
         // DONE: コメントはコードとは別の行に記述してください。
-        
+
         var items = new List<string> { "＋", "－", "×", "÷" }; 
         fourArithmeticOptsComboBox.ItemsSource = items;
     }
@@ -56,41 +60,55 @@ public partial class MainWindow : Window
         // TExtBoxはstring型でしか扱えないので、計算のために型を変換する。
         var firstNum = firstNumericTextBox.Text;   
         var secondNum = secondNumericTextBox.Text;　
-        int firstNum_int, secondNum_int;                  
-        var fourArithmeticOpts = fourArithmeticOptsComboBox.Text; 
+        int firstNum_int, secondNum_int;  
+        
+        var fourArithmeticOpts = fourArithmeticOptsComboBox.Text;
+
+        DateTime calculationTime = DateTime.Now;
 
         int.TryParse(firstNum, out firstNum_int);
         int.TryParse(secondNum, out secondNum_int);
 
         // DONE: 使用しない、しなくなったコードは消してください。
 
-        var instance = new Class1()
-        {
-            FirstNum = firstNum,
-        };
-
         //選択された演算子をインデックスではなく文字で判断。
-        switch (fourArithmeticOpts) 
+        switch (fourArithmeticOpts)
         {
             case "＋":
-                 ResultNum = firstNum_int + secondNum_int;
+                 ResultNum_int = firstNum_int + secondNum_int;
                 break;
             case "－":
-                 ResultNum = firstNum_int - secondNum_int;
+                 ResultNum_int = firstNum_int - secondNum_int;
                 break;
             case "×":
-                 ResultNum = firstNum_int * secondNum_int;
+                 ResultNum_int = firstNum_int * secondNum_int;
                 break;
             case "÷":
                 if (secondNum_int != 0)
-                    ResultNum = firstNum_int / secondNum_int;
+                    ResultNum_int = firstNum_int / secondNum_int;
                 else
                     MessageBox.Show("ゼロで割ることはできません");
                 break;
         }
 
         //TextBoxへ計算結果を出力するためにResultNumをstringに変換
-        ResultNumericTextBox.Text = ResultNum.ToString(); 
+        ResultNumericTextBox.Text = ResultNum_int.ToString();
+
+        
+
+        var history = new CalculationHistory()
+        {
+            FirstNum = firstNum,
+            SecondNum = secondNum,
+            CalcDateTime = calculationTime,
+            FourArithmeticOpts = fourArithmeticOpts,
+            ResultNum = ResultNum_int,
+        };
+            histories.Add(history);
+        CalcHistoryListBox.ItemsSource = null;
+        CalcHistoryListBox.ItemsSource = histories;
+
+
 
     }
 
