@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.VisualBasic;
 
 namespace SimpleCalc
 {
@@ -13,4 +14,9 @@ namespace SimpleCalc
         public DateTime CalcDateTime { get; set; }
 
     }
+    //public void CalcResult(string FirstNum, string SecondNum, string FourArithmeticOpts, int ResultNum,
+    //    DateAndTime CalcDateTime)
+    //{
+
+    //}
 }

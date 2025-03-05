@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Formats.Asn1;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.Win32;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SimpleCalc;
@@ -112,4 +117,53 @@ public partial class MainWindow : Window
 
     }
 
+    private void SaveFileButton(object sender, RoutedEventArgs e)
+    {
+
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            // SaveFileDialog を使用して保存先を選択
+            Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*"
+        };
+
+        // ダイアログを表示し、ユーザーが保存先を選択した場合
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            // ListBoxの内容をCSVファイルに保存
+            string filePath = saveFileDialog.FileName;
+            SaveCsvFile(filePath);
+        }
+    }
+
+
+
+    // CSVファイルに内容を書き込むメソッド
+    private void SaveCsvFile(string filePath)
+    {
+        try
+        {
+
+            {
+                var records = new List<CalculationHistory>();
+                foreach (var item in CalcHistoryListBox.Items)
+                {
+                    records.Add(item as CalculationHistory);
+                }
+
+                // CsvHelperを使用してリストをCSVに書き込む
+                using (var writer = new StreamWriter(filePath))
+                using (var csv = new CsvWriter(writer,
+                           new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture)))
+                {
+                    csv.WriteHeader<CalculationHistory>();
+                    csv.NextRecord();
+                    csv.WriteRecords(records);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error saving file: " + ex.Message);
+        }
+    }
 }
