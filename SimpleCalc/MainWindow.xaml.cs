@@ -23,8 +23,9 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        // TODO: コメントはコードとは別の行に記述してください。
-        var items = new List<string> { "＋", "－", "×", "÷" }; //インデックスではなく文字で判断
+        // DONE: コメントはコードとは別の行に記述してください。
+        
+        var items = new List<string> { "＋", "－", "×", "÷" }; 
         fourArithmeticOptsComboBox.ItemsSource = items;
     }
     private void NumericTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -33,12 +34,12 @@ public partial class MainWindow : Window
         e.Handled = !IsNumeric(e.Text);
     }
 
-    // TODO: summaryの内容を書いてください。
+    // DONE: summaryの内容を書いてください。
     /// <summary>
-    /// test
+    /// 入力値が数値（整数）であるかどうかの結果を返却する。
     /// </summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
+    /// <param name="text">テキストボックス(firstNumericTextBox,secondNumericTextBox)に入力された文字列。</param>
+    /// <returns>整数値→true,その他→false.</returns>
     private bool IsNumeric(string text)
     {
         // 数値だけ（整数）を許可
@@ -48,39 +49,50 @@ public partial class MainWindow : Window
 
 
 
+    /// <summary>
+    /// このメソッドは、2つの入力値と選択した演算子にあった計算をしてその結果を出力する。
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Calc_Button(object sender, RoutedEventArgs e )
     {
-        // TODO:処理をそのままなぞるだけのコメントは書かない
+        // DONE:処理をそのままなぞるだけのコメントは書かない
         // ソースコードから読み取れない実装意図などを記述してください。
-        var firstNum = firstNumericTextBox.Text;    //一つ目のTextBoxから文字列の読み込み
-        var secondNum = secondNumericTextBox.Text;　//二つ目のTextBoxから文字列の読み込み
-        int firstNum_int, econdNum_int;                   //intへ返還後の変数名
-        var fourArithmeticOpts = fourArithmeticOptsComboBox.Text;  //ComboBoxから演算子を読み込む
+        // TExtBoxはstring型でしか扱えないので、計算のために型を変換する。
+        var firstNum = firstNumericTextBox.Text;   
+        var secondNum = secondNumericTextBox.Text;　
+        int firstNum_int, secondNum_int;                  
+        var fourArithmeticOpts = fourArithmeticOptsComboBox.Text; 
 
         int.TryParse(firstNum, out firstNum_int);
-        int.TryParse(secondNum, out econdNum_int);
+        int.TryParse(secondNum, out secondNum_int);
 
-        // TODO: 使用しない、しなくなったコードは消してください。
-        //fourArithmeticOptsComboBox
+        // DONE: 使用しない、しなくなったコードは消してください。
 
+        var instance = new Class1()
+        {
+            FirstNum = firstNum,
+        };
 
-        switch (fourArithmeticOpts) //ComboBoxで選択された演算子を読み込み、caseで場合分けし、結果をResultNumに代入
+        //選択された演算子をインデックスではなく文字で判断。
+        switch (fourArithmeticOpts) 
         {
             case "＋":
-                 ResultNum = firstNum_int + econdNum_int;
+                 ResultNum = firstNum_int + secondNum_int;
                 break;
             case "－":
-                 ResultNum = firstNum_int - econdNum_int;
+                 ResultNum = firstNum_int - secondNum_int;
                 break;
             case "×":
-                 ResultNum = firstNum_int * econdNum_int;
+                 ResultNum = firstNum_int * secondNum_int;
                 break;
             case "÷":
-                 ResultNum = firstNum_int / econdNum_int;
+                 ResultNum = firstNum_int / secondNum_int;
                 break;
         }
 
-        ResultNumericTextBox.Text = ResultNum.ToString(); //ResultNumをstringに変換し、ResultNumericTextBoxに出力させる
+        //TextBoxへ計算結果を出力するためにResultNumをstringに変換
+        ResultNumericTextBox.Text = ResultNum.ToString(); 
 
     }
 }
