@@ -32,8 +32,6 @@ public partial class MainWindow : Window
        
         CalcHistoryListBox.ItemsSource = histories;
 
-        // DONE: コメントはコードとは別の行に記述してください。
-
         var items = new List<string> { "＋", "－", "×", "÷" }; 
         fourArithmeticOptsComboBox.ItemsSource = items;
     }
@@ -43,7 +41,6 @@ public partial class MainWindow : Window
         e.Handled = !IsNumeric(e.Text);
     }
 
-    // DONE: summaryの内容を書いてください。
     /// <summary>
     /// 入力値が数値（整数）であるかどうかの結果を返却する。
     /// </summary>
@@ -60,8 +57,6 @@ public partial class MainWindow : Window
 
     private void Calc_Button(object sender, RoutedEventArgs e )
     {
-        // DONE:処理をそのままなぞるだけのコメントは書かない
-        // ソースコードから読み取れない実装意図などを記述してください。
         // TExtBoxはstring型でしか扱えないので、計算のために型を変換する。
         var firstNum = firstNumericTextBox.Text;   
         var secondNum = secondNumericTextBox.Text;　
@@ -73,8 +68,6 @@ public partial class MainWindow : Window
 
         int.TryParse(firstNum, out firstNum_int);
         int.TryParse(secondNum, out secondNum_int);
-
-        // DONE: 使用しない、しなくなったコードは消してください。
 
         //選択された演算子をインデックスではなく文字で判断。
         switch (fourArithmeticOpts)
