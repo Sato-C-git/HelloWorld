@@ -19,6 +19,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.Win32;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Path = System.IO.Path;
 
 namespace SimpleCalc;
 
@@ -110,8 +111,6 @@ public partial class MainWindow : Window
             ResultNum = ResultNum_int,
         };
         histories.Add(history);
-        //CalcHistoryListBox.ItemsSource = null;
-        //CalcHistoryListBox.ItemsSource = histories;
 
 
     }
@@ -121,7 +120,7 @@ public partial class MainWindow : Window
         SaveFileDialog saveFileDialog = new SaveFileDialog
         {
             // SaveFileDialog を使用して保存先を選択
-            Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*"
+            Filter = "CSV Files (*.csv)|*.csv| JSON Files (*.json)|*.json| All Files (*.*)|*.*"
         };
 
         // ダイアログを表示し、ユーザーが保存先を選択した場合
@@ -129,73 +128,39 @@ public partial class MainWindow : Window
         {
             return;
         }
-        // ListBoxの内容をCSVファイルに保存
+        // ListBoxの内容をCSVファイルもしくはJSONファイルに保存
         string filePath = saveFileDialog.FileName;
-        SaveCsvFile(filePath);
+        var extension = Path.GetExtension(filePath);
+        IFileManager fileManager = extension.Equals(".json", StringComparison.OrdinalIgnoreCase)
+            ? new JsonFileManager()
+            : new CsvFileManager();
+        fileManager.SaveFile(filePath, histories);
     }
 
 
-    /// <summary>
-    /// CSVファイルに内容を書き込むメソッド
-    /// </summary>
-    /// <param name="filePath">保存先のパス</param>
-    private void SaveCsvFile(string filePath)
-    {
-        try
-        {
-            var records = new List<CalculationHistory>();
-            foreach (var item in CalcHistoryListBox.Items)
-            {
-                records.Add(item as CalculationHistory);
-            }
-
-            // CsvHelperを使用してリストをCSVに書き込む
-            using var writer = new StreamWriter(filePath, true, Encoding.UTF8);
-            using var csv = new CsvWriter(writer, new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture));
-            csv.WriteHeader<CalculationHistory>();
-            csv.NextRecord();
-            csv.WriteRecords((IEnumerable)records);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error saving file: " + ex.Message);
-        }
-    }
+  
 
     private void LoadFileButton(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog
         {
             // OpenFileDialog を使用してロード元を選択
-            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            Filter = "CSV files (*.csv)|*.csv|JSON Files (*.json)|*.json| All files (*.*)|*.*"
         };
+
+        // ダイアログを表示し、ユーザーが開くファイルを選択した場合
         if (openFileDialog.ShowDialog() != true)
         {
             return;
         }
-
+        //選択したcsvファイルもしくはJSONファイルをLisTBoxに出力
         string filePath = openFileDialog.FileName;
-        LoadCsvFile(filePath);
-
+        var extension = Path.GetExtension(filePath);
+        IFileManager fileManager = extension.Equals(".json", StringComparison.OrdinalIgnoreCase)
+            ? new JsonFileManager()
+            : new CsvFileManager();
+        fileManager.LoadFile(filePath, histories);
     }
 
-    private void LoadCsvFile(string filePath)
-    {
-        try
-        {
-            using var reader = new StreamReader(filePath);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            var records = csv.GetRecords<CalculationHistory>().ToList();
 
-            // ListBox にデータを追加
-            foreach (var record in records)
-            {
-                histories.Add(record);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error load file: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
 }
