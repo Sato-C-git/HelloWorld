@@ -23,11 +23,7 @@ public class JsonFileManager : IFileManager
     {
         try
         {
-            var records = new List<CalculationHistory>();
-            foreach (var item in items)
-            {
-                records.Add(item as CalculationHistory);
-            }
+            var records = items.Select(item => item as CalculationHistory).ToList();
 
             var json = JsonConvert.SerializeObject(records, Formatting.Indented);
             await File.WriteAllTextAsync(filePath, json, Encoding.UTF8);

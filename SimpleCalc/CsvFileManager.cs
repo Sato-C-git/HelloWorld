@@ -19,11 +19,7 @@ public class CsvFileManager : IFileManager
     {
         try
         {
-            var records = new List<CalculationHistory>();
-            foreach (var item in items)
-            {
-                records.Add(item as CalculationHistory);
-            }
+            var records = items.Select(item => item as CalculationHistory).ToList();
 
             // CsvHelperを使用してリストをCSVに書き込む
             await using var writer = new StreamWriter(filePath, true, Encoding.UTF8);
