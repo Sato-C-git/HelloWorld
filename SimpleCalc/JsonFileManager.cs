@@ -19,7 +19,7 @@ namespace SimpleCalc;
 public class JsonFileManager : IFileManager
 {
     /// <inheritdoc />
-    public void SaveFile(string filePath, IEnumerable<CalculationHistory> items)
+    public async Task SaveFile(string filePath, IEnumerable<CalculationHistory> items)
     {
         try
         {
@@ -30,7 +30,7 @@ public class JsonFileManager : IFileManager
             }
 
             var json = JsonConvert.SerializeObject(records, Formatting.Indented);
-            File.WriteAllText(filePath, json, Encoding.UTF8);
+            await File.WriteAllTextAsync(filePath, json, Encoding.UTF8);
         }
         catch (Exception ex)
         {
@@ -40,11 +40,11 @@ public class JsonFileManager : IFileManager
     }
 
     /// <inheritdoc />
-    public void LoadFile(string filePath, ICollection<CalculationHistory> items)
+    public async Task LoadFile(string filePath, ICollection<CalculationHistory> items)
     {
         try
         {
-            var json = File.ReadAllText(filePath);
+            var json = await File.ReadAllTextAsync(filePath);
              var records = JsonConvert.DeserializeObject<List<CalculationHistory>>(json) ?? [];
 
 

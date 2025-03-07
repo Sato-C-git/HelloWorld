@@ -15,7 +15,7 @@ public class CsvFileManager : IFileManager
     /// </summary>
     /// <param name="filePath">保存先のパス</param>
     /// <param name="items">保存する値</param>
-    public void SaveFile(string filePath, IEnumerable<CalculationHistory> items)
+    public async Task SaveFile(string filePath, IEnumerable<CalculationHistory> items)
     {
         try
         {
@@ -26,11 +26,12 @@ public class CsvFileManager : IFileManager
             }
 
             // CsvHelperを使用してリストをCSVに書き込む
-            using var writer = new StreamWriter(filePath, true, Encoding.UTF8);
-            using var csv = new CsvWriter(writer, new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture));
+            await using var writer = new StreamWriter(filePath, true, Encoding.UTF8);
+            await using var csv = new CsvWriter(writer, new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture));
             csv.WriteHeader<CalculationHistory>();
-            csv.NextRecord();
-            csv.WriteRecords((IEnumerable)records);
+            await csv.NextRecordAsync();
+            await csv.WriteRecordsAsync((IEnumerable)records);
+            
         }
         catch (Exception ex)
         {
@@ -44,16 +45,16 @@ public class CsvFileManager : IFileManager
     /// </summary>
     /// <param name="filePath">読み込み元のパス</param>
     /// <param name="items">読み込む値</param>
-    public void LoadFile(string filePath, ICollection<CalculationHistory> items)
+    public async Task LoadFile(string filePath, ICollection<CalculationHistory> items)
     {
         try
         {
             using var reader = new StreamReader(filePath);
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            var records = csv.GetRecords<CalculationHistory>().ToList();
+            var records = csv.GetRecordsAsync<CalculationHistory>();
 
             // ListBox にデータを追加
-            foreach (var record in records)
+            await foreach (var record in records)
             {
                 items.Add(record);
             }

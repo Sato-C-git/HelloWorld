@@ -115,7 +115,7 @@ public partial class MainWindow : Window
 
     }
 
-    private void SaveFileButton(object sender, RoutedEventArgs e)
+    private async void SaveFileButton(object sender, RoutedEventArgs e)
     {
         SaveFileDialog saveFileDialog = new SaveFileDialog
         {
@@ -134,13 +134,13 @@ public partial class MainWindow : Window
         IFileManager fileManager = extension.Equals(".json", StringComparison.OrdinalIgnoreCase)
             ? new JsonFileManager()
             : new CsvFileManager();
-        fileManager.SaveFile(filePath, histories);
+        await fileManager.SaveFile(filePath, histories);
     }
 
 
   
 
-    private void LoadFileButton(object sender, RoutedEventArgs e)
+    private async void LoadFileButton(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog
         {
@@ -159,7 +159,7 @@ public partial class MainWindow : Window
         IFileManager fileManager = extension.Equals(".json", StringComparison.OrdinalIgnoreCase)
             ? new JsonFileManager()
             : new CsvFileManager();
-        fileManager.LoadFile(filePath, histories);
+        await fileManager.LoadFile(filePath, histories);
     }
 
 
