@@ -1,8 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Formats.Asn1;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -24,15 +28,15 @@ namespace SimpleCalc;
 public partial class MainWindow : Window
 {
     private int ResultNum_int;
-    private List<CalculationHistory> histories = new();
+    private ObservableCollection<CalculationHistory> histories = new();
 
     public MainWindow()
     {
         InitializeComponent();
-       
+
         CalcHistoryListBox.ItemsSource = histories;
 
-        var items = new List<string> { "＋", "－", "×", "÷" }; 
+        var items = new List<string> { "＋", "－", "×", "÷" };
         fourArithmeticOptsComboBox.ItemsSource = items;
     }
     private void NumericTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
@@ -44,7 +48,7 @@ public partial class MainWindow : Window
     /// <summary>
     /// 入力値が数値（整数）であるかどうかの結果を返却する。
     /// </summary>
-    /// <param name="text">テキストボックス(firstNumericTextBox,secondNumericTextBox)に入力された文字列。</param>
+    /// <param name="text">判定する文字列</param>
     /// <returns>整数値→true,その他→false.</returns>
     private bool IsNumeric(string text)
     {
@@ -55,16 +59,16 @@ public partial class MainWindow : Window
 
 
 
-    private void Calc_Button(object sender, RoutedEventArgs e )
+    private void Calc_Button(object sender, RoutedEventArgs e)
     {
         // TExtBoxはstring型でしか扱えないので、計算のために型を変換する。
-        var firstNum = firstNumericTextBox.Text;   
-        var secondNum = secondNumericTextBox.Text;　
-        int firstNum_int, secondNum_int;  
-        
+        var firstNum = firstNumericTextBox.Text;
+        var secondNum = secondNumericTextBox.Text;
+        int firstNum_int, secondNum_int;
+
         var fourArithmeticOpts = fourArithmeticOptsComboBox.Text;
 
-        DateTime calculationTime = DateTime.Now;
+        var calculationTime = DateTime.Now;
 
         int.TryParse(firstNum, out firstNum_int);
         int.TryParse(secondNum, out secondNum_int);
@@ -73,27 +77,30 @@ public partial class MainWindow : Window
         switch (fourArithmeticOpts)
         {
             case "＋":
-                 ResultNum_int = firstNum_int + secondNum_int;
+                ResultNum_int = firstNum_int + secondNum_int;
                 break;
             case "－":
-                 ResultNum_int = firstNum_int - secondNum_int;
+                ResultNum_int = firstNum_int - secondNum_int;
                 break;
             case "×":
-                 ResultNum_int = firstNum_int * secondNum_int;
+                ResultNum_int = firstNum_int * secondNum_int;
                 break;
             case "÷":
                 if (secondNum_int != 0)
+                {
                     ResultNum_int = firstNum_int / secondNum_int;
+                }
                 else
+                {
                     MessageBox.Show("ゼロで割ることはできません");
+                }
                 break;
         }
 
         //TextBoxへ計算結果を出力するためにResultNumをstringに変換
         ResultNumericTextBox.Text = ResultNum_int.ToString();
 
-        
-        //
+
         var history = new CalculationHistory()
         {
             FirstNum = firstNum,
@@ -102,17 +109,15 @@ public partial class MainWindow : Window
             FourArithmeticOpts = fourArithmeticOpts,
             ResultNum = ResultNum_int,
         };
-            histories.Add(history);
-        CalcHistoryListBox.ItemsSource = null;
-        CalcHistoryListBox.ItemsSource = histories;
-
+        histories.Add(history);
+        //CalcHistoryListBox.ItemsSource = null;
+        //CalcHistoryListBox.ItemsSource = histories;
 
 
     }
 
     private void SaveFileButton(object sender, RoutedEventArgs e)
     {
-
         SaveFileDialog saveFileDialog = new SaveFileDialog
         {
             // SaveFileDialog を使用して保存先を選択
@@ -120,43 +125,77 @@ public partial class MainWindow : Window
         };
 
         // ダイアログを表示し、ユーザーが保存先を選択した場合
-        if (saveFileDialog.ShowDialog() == true)
+        if (saveFileDialog.ShowDialog() != true)
         {
-            // ListBoxの内容をCSVファイルに保存
-            string filePath = saveFileDialog.FileName;
-            SaveCsvFile(filePath);
+            return;
         }
+        // ListBoxの内容をCSVファイルに保存
+        string filePath = saveFileDialog.FileName;
+        SaveCsvFile(filePath);
     }
 
 
-
-    // CSVファイルに内容を書き込むメソッド
+    /// <summary>
+    /// CSVファイルに内容を書き込むメソッド
+    /// </summary>
+    /// <param name="filePath">保存先のパス</param>
     private void SaveCsvFile(string filePath)
     {
         try
         {
-
+            var records = new List<CalculationHistory>();
+            foreach (var item in CalcHistoryListBox.Items)
             {
-                var records = new List<CalculationHistory>();
-                foreach (var item in CalcHistoryListBox.Items)
-                {
-                    records.Add(item as CalculationHistory);
-                }
-
-                // CsvHelperを使用してリストをCSVに書き込む
-                using (var writer = new StreamWriter(filePath, true, Encoding.UTF8))
-                using (var csv = new CsvWriter(writer,
-                           new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture)))
-                {
-                    csv.WriteHeader<CalculationHistory>();
-                    csv.NextRecord();
-                    csv.WriteRecords(records);
-                }
+                records.Add(item as CalculationHistory);
             }
+
+            // CsvHelperを使用してリストをCSVに書き込む
+            using var writer = new StreamWriter(filePath, true, Encoding.UTF8);
+            using var csv = new CsvWriter(writer, new CsvConfiguration(System.Globalization.CultureInfo.InvariantCulture));
+            csv.WriteHeader<CalculationHistory>();
+            csv.NextRecord();
+            csv.WriteRecords((IEnumerable)records);
         }
         catch (Exception ex)
         {
             MessageBox.Show("Error saving file: " + ex.Message);
+        }
+    }
+
+    private void LoadFileButton(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog
+        {
+            // OpenFileDialog を使用してロード元を選択
+            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+        };
+        if (openFileDialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        string filePath = openFileDialog.FileName;
+        LoadCsvFile(filePath);
+
+    }
+
+    private void LoadCsvFile(string filePath)
+    {
+        try
+        {
+            using var reader = new StreamReader(filePath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            var records = csv.GetRecords<CalculationHistory>().ToList();
+
+            // ListBox にデータを追加
+            foreach (var record in records)
+            {
+                histories.Add(record);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error load file: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

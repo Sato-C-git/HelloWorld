@@ -28,7 +28,7 @@
         <ComboBox Grid.Row="0" Grid.Column="2" Name="fourArithmeticOptsComboBox" Width="50" Height="30" FontSize="20" />
         <TextBlock Grid.Row="0" Grid.Column="4" Name="equal" Width="40" Height="30" FontSize="20" Text ="  = "/>
         <Button Grid.Row="1" Grid.Column="3" Content=" Calc " HorizontalAlignment="Left" VerticalAlignment="Top" Margin="60,0,0,0" Click="Calc_Button"/>
-        <ListBox Grid.Row="2" Grid.Column="3" Margin="-50,0,-50,0" Name="CalcHistoryListBox" >
+        <ListBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Name="CalcHistoryListBox" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -42,17 +42,18 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding FirstNum }" />
-                       <TextBlock Grid.Column="1" Text="{ Binding FourArithmeticOpts }" />
+                        <TextBlock Grid.Column="1" Text="{ Binding FourArithmeticOpts }" />
                         <TextBlock Grid.Column="2" Text="{ Binding SecondNum }" />
                         <TextBlock Grid.Column="3" Text="=" />
                         <TextBlock Grid.Column="4" Text="{ Binding ResultNum }" />
                         <TextBlock Grid.Column="5" Text=" " />
-                        <TextBlock Grid.Column="6" Text="{ Binding CalcDateTime, StringFormat=yyyy/MM/dd HH:mm:ss }" />
+                        <TextBlock Grid.Column="6" Text="{ Binding CalcDateTimeString }" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Column="5" Content=" SAVE "  Grid.Row="2" VerticalAlignment="Top" Width="40" Height="20" Margin="-100,30,0,0" Click="SaveFileButton"/>
+        <Button Grid.Column="5" Content=" SAVE " Grid.Row="2" VerticalAlignment="Top" Width="40" Height="20" Margin="35,27,125,0" Click="SaveFileButton"/>
+        <Button Grid.Column="5" Content=" LOAD " Grid.Row="2" VerticalAlignment="Top" Width="40" Height="20" Margin="125,27,35,0" Click="LoadFileButton"/>
 
 
 
