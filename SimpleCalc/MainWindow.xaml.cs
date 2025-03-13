@@ -37,6 +37,7 @@ public partial class MainWindow : Window
 
         CalcHistoryListBox.ItemsSource = histories;
 
+        // Enumを使うとよい
         var items = new List<string> { "＋", "－", "×", "÷" };
         fourArithmeticOptsComboBox.ItemsSource = items;
     }
@@ -56,6 +57,17 @@ public partial class MainWindow : Window
         // 数値だけ（整数）を許可
         // bool演算なので受け取った値が整数か否かを返却
         return text.All(Char.IsDigit);
+
+        // LINQを使わずに書くとこのような形式
+        // LINQを使うことでコレクション操作が直感的かつ簡潔に記述できるので積極的に使いましょう
+        //foreach (var character in text)
+        //{
+        //    if (!Char.IsDigit(character))
+        //    {
+        //        return false;
+        //    }
+        //}
+        //return true;
     }
 
 
@@ -71,6 +83,8 @@ public partial class MainWindow : Window
 
         var calculationTime = DateTime.Now;
 
+        // 事前に変数を宣言しなくても int.TryParse(firstNum, out var firstNum_int)という記述方法ができる
+        // TryParseは返り値として変換が成功したかを返却するので、失敗した場合は処理を抜けるのが良い
         int.TryParse(firstNum, out firstNum_int);
         int.TryParse(secondNum, out secondNum_int);
 

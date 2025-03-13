@@ -30,6 +30,7 @@ public class JsonFileManager : IFileManager
         }
         catch (Exception ex)
         {
+            // GUIでの通知はここでやるべきではない(イベントハンドラー内などが良い)
             MessageBox.Show("Error saving file: " + ex.Message);
         }
 

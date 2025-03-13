@@ -9,6 +9,8 @@ public interface IFileManager
     /// <param name="items">保存の内容</param>
     Task SaveFile(string filePath, IEnumerable<CalculationHistory> items);
 
+    // 引数のコレクションを操作するのではなく、読み込んだコレクションを返却するほうがより適切な形式になる。
+    // 非同期メソッドでTaskを返り値とする場合はTask<T>という形でオブジェクトを返却することができる。
     /// <summary>
     /// ファイルからの読み込み
     /// </summary>
